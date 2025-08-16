@@ -5,14 +5,22 @@ import Gio from "gi://Gio";
 export default class DayTransitionWallpaperExtension extends Extension {
   _timeoutId = null;
   _settings = null;
+  _wallpaperPath = null;
+
+  constructor(metadata) {
+    super(metadata);
+    // Path to the extension folder
+    this._extensionPath = metadata.dir.get_path();
+    // Path to the wallpapers folder
+    this._wallpaperPath = `${this._extensionPath}/wallpapers/`;
+    log("This is a debug message");
+  }
 
   enable() {
-    // Create a GSettings object to change the wallpaper
     this._settings = new Gio.Settings({
       schema_id: "org.gnome.desktop.background",
     });
 
-    // Start the wallpaper loop
     this._updateWallpaper();
   }
 
@@ -27,32 +35,29 @@ export default class DayTransitionWallpaperExtension extends Extension {
     const now = new Date();
     const hour = now.getHours();
 
-    let path;
+    // Determine which wallpaper to use
+    let wallpaperFile;
     if (hour >= 6 && hour <= 10) {
-      path =
-        "/home/rosenspurr/Pictures/wallpapers/infinity/F8-wallpaper-morning.png";
+      wallpaperFile = "F8-wallpaper-morning.png";
     } else if (hour < 17) {
-      path =
-        "/home/rosenspurr/Pictures/wallpapers/infinity/F8-wallpaper-day.png";
+      wallpaperFile = "F8-wallpaper-day.png";
     } else if (hour < 19) {
-      path =
-        "/home/rosenspurr/Pictures/wallpapers/infinity/F8-wallpaper-sunset.png";
+      wallpaperFile = "F8-wallpaper-sunset.png";
     } else {
-      path =
-        "/home/rosenspurr/Pictures/wallpapers/infinity/F8-wallpaper-night.png";
+      wallpaperFile = "F8-wallpaper-night.png";
     }
 
-    const uri = `file://${path}`;
+    const uri = `file://${this._wallpaperPath}${wallpaperFile}`;
     this._settings.set_string("picture-uri", uri);
     this._settings.set_string("picture-uri-dark", uri);
 
-    // Check again in 2 minutes
+    // Update every 2 minutes
     this._timeoutId = GLib.timeout_add_seconds(
       GLib.PRIORITY_DEFAULT,
       120,
       () => {
         this._updateWallpaper();
-        return GLib.SOURCE_CONTINUE; // keep repeating
+        return GLib.SOURCE_CONTINUE;
       },
     );
   }

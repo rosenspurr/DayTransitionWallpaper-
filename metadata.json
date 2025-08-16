@@ -1,7 +1,7 @@
 {
   "name": "Day Transition Wallpaper",
-  "description": "sets wallpapers in specific intervals of the day",
+  "description": "Restores the old stock Fedora 8 animated wallpaper called 'Infinity'. Sets wallpapers at specific intervals as the day progresses.",
   "uuid": "daytransitionwallpaper@rosenspurr.dev",
-  "shell-version": ["47"],
+  "shell-version": ["47"]
   "prefs": "prefs.js"
 }
