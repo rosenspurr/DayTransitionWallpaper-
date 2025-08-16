@@ -1,0 +1,7 @@
+{
+  "name": "Day Transition Wallpaper",
+  "description": "sets wallpapers in specific intervals of the day",
+  "uuid": "daytransitionwallpaper@rosenspurr.dev",
+  "shell-version": ["47"],
+  "prefs": "prefs.js"
+}

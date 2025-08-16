@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.daytransitionwallpaper" path="/org/gnome/shell/extensions/daytransitionwallpaper/">
+    <key name="start-hour" type="i">
+      <default>7</default>
+      <summary>Start hour for wallpaper change</summary>
+      <description>Hour of the day when the wallpaper transition starts (0-23)</description>
+    </key>
+    <key name="end-hour" type="i">
+      <default>19</default>
+      <summary>End hour for wallpaper change</summary>
+      <description>Hour of the day when the wallpaper transition ends (0-23)</description>
+    </key>
+    <key name="wallpaper-path" type="s">
+      <default>""</default>
+      <summary>Path to the wallpaper image</summary>
+      <description>File path for the wallpaper to set during the interval</description>
+    </key>
+  </schema>
+</schemalist>
