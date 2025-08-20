@@ -9,22 +9,23 @@ export default class DayTransitionWallpaperExtension extends Extension {
 
   constructor(metadata) {
     super(metadata);
-    // Path to the extension folder
     this._extensionPath = metadata.dir.get_path();
-    // Path to the wallpapers folder
     this._wallpaperPath = `${this._extensionPath}/wallpapers/`;
-    log("This is a debug message");
+    log("DayTransitionWallpaper extension initialized");
   }
 
   enable() {
     this._settings = new Gio.Settings({
       schema_id: "org.gnome.desktop.background",
     });
-
     this._updateWallpaper();
   }
 
   disable() {
+    this._clearTimer();
+  }
+
+  _clearTimer() {
     if (this._timeoutId) {
       GLib.Source.remove(this._timeoutId);
       this._timeoutId = null;
@@ -32,10 +33,12 @@ export default class DayTransitionWallpaperExtension extends Extension {
   }
 
   _updateWallpaper() {
+    // Clear old timer first
+    this._clearTimer();
+
     const now = new Date();
     const hour = now.getHours();
 
-    // Determine which wallpaper to use
     let wallpaperFile;
     if (hour >= 6 && hour <= 10) {
       wallpaperFile = "F8-wallpaper-morning.png";
@@ -51,7 +54,9 @@ export default class DayTransitionWallpaperExtension extends Extension {
     this._settings.set_string("picture-uri", uri);
     this._settings.set_string("picture-uri-dark", uri);
 
-    // Update every 2 minutes
+    log(`Wallpaper updated: ${uri}`);
+
+    // Schedule next update in 2 minutes
     this._timeoutId = GLib.timeout_add_seconds(
       GLib.PRIORITY_DEFAULT,
       120,
